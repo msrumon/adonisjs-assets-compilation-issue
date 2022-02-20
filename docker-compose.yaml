@@ -3,12 +3,13 @@ services:
     image: node:lts-alpine
     working_dir: /app
     command:
-      - yarn
-      - run
-      - dev
+      - node
+      - ace
+      - serve
+      - --watch
+      - --no-assets
     ports:
       - 3333:3333
-      - 8080:8080
     environment:
       SILENT_ENV: true
       PORT: 3333
@@ -20,6 +21,8 @@ services:
       CACHE_VIEWS: false
     volumes:
       - ./src:/app:rw
+    depends_on:
+      - encore
   ace:
     image: node:lts-alpine
     working_dir: /app
@@ -33,5 +36,15 @@ services:
     working_dir: /app
     entrypoint:
       - yarn
+    volumes:
+      - ./src:/app:rw
+  encore:
+    image: node:lts-alpine
+    working_dir: /app
+    entrypoint:
+      - yarn
+      - encore
+      - dev
+      - --watch
     volumes:
       - ./src:/app:rw
